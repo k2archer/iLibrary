@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">iLibrary</string>
+    <string name="dialog_default_message">很抱歉,程序出现异常退出了!</string>
 </resources>

@@ -12,8 +12,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.kwei.ilibrary.MainActivity;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -40,10 +38,10 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         private static final CrashHandler sInstance = new CrashHandler();
     }
 
-    public void init(Context context, boolean isDefaultHandler) {
+    public void init(Context context, boolean useDefaultHandler) {
         Thread.setDefaultUncaughtExceptionHandler(this);
         mContext = context.getApplicationContext();
-        if (isDefaultHandler) {
+        if (useDefaultHandler) {
             mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
         }
     }
@@ -52,32 +50,16 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     public void uncaughtException(Thread thread, Throwable throwable) {
 
         if (!handleException(throwable) && mDefaultCrashHandler != null) {
-            // 如果用户没有处理则让系统默认的异常处理器来处理
+            // 如果没有自定义处理器则让系统默认的异常处理器来处理
             mDefaultCrashHandler.uncaughtException(thread, throwable);
         } else {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                Log.e(TAG, "error : " + e.getMessage());
-            }
-            restartApp(mContext, MainActivity.class, 2000);  // 重启 App
-            android.os.Process.killProcess(android.os.Process.myPid());  // 退出程序
-            System.exit(1);
+            showDelayToast();
+            crashRestartApp(mContext, CrashDialogActivity.class, 1000);  // 重启 App
         }
-
     }
 
     private boolean handleException(Throwable throwable) {
         if (throwable == null) return false;
-
-        new Thread() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                Toast.makeText(mContext, "很抱歉，程序出现异常，3秒后重启", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }.start();
 
         // export trace info
         try {
@@ -91,14 +73,35 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         return true;
     }
 
-    private static void restartApp(Context context, Class cls, long delayMillis) {
+    private void showDelayToast() {
+        int delayTime = 1; // 延时重启时间(秒)
+        final String message = "很抱歉，程序出现异常，" + delayTime + "秒后重启";
+        new Thread() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+                Looper.loop();
+            }
+        }.start();
+
+        try {
+            Thread.sleep(delayTime * 1000);
+        } catch (InterruptedException e) {
+            Log.e(TAG, "error : " + e.getMessage());
+        }
+    }
+
+    private static void crashRestartApp(Context context, Class cls, long delayMillis) {
         Intent intent = new Intent(context, cls);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         PendingIntent restartIntent = PendingIntent.getActivity(context, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         // 延迟 delayMillis 毫秒执行操作
         alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + delayMillis, restartIntent);
-        android.os.Process.killProcess(android.os.Process.myPid());
+        android.os.Process.killProcess(android.os.Process.myPid());  // 退出程序
+        System.exit(1);
     }
 
     private void dumpExceptionToSDCard(Throwable throwable) throws IOException {
@@ -149,16 +152,3 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         writer.println("CPU ARI: " + Build.CPU_ABI);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
