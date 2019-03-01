@@ -15,7 +15,7 @@ public class BaseApplication extends Application {
         crashHandler.init(this, false);
     }
 
-    public BaseApplication getInstance() {
+    public static BaseApplication getInstance() {
         return sInstance;
     }
 }
