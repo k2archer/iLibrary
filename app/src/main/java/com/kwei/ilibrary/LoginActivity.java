@@ -12,6 +12,7 @@ import com.kwei.ilibrary.base.BaseActivity;
 import com.kwei.ilibrary.base.BaseApplication;
 import com.kwei.ilibrary.util.HttpCallbackListener;
 import com.kwei.ilibrary.util.HttpUtil;
+import com.kwei.ilibrary.util.LogUtil;
 import com.kwei.ilibrary.util.ResponseBody;
 import com.kwei.ilibrary.util.ServerURL;
 
@@ -68,7 +69,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onFailure(Exception e) {
-                Log.d(TAG, "onFailure: " + e.toString());
+                LogUtil.d(e.toString());
             }
         });
 
