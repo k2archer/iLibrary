@@ -3,13 +3,17 @@ package com.kwei.ilibrary;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kwei.ilibrary.base.BaseActivity;
 import com.kwei.ilibrary.base.BaseApplication;
+import com.kwei.ilibrary.config.ConfigHelper;
 import com.kwei.ilibrary.util.HttpCallbackListener;
 import com.kwei.ilibrary.util.HttpUtil;
 import com.kwei.ilibrary.util.LogUtil;
@@ -21,6 +25,8 @@ public class LoginActivity extends BaseActivity {
     private EditText EdUserName;
     private EditText EdUserPassword;
 
+    private AlertDialog mDialog;
+
     @Override
     public void initView(View view) {
         ActionBar actionBar = getSupportActionBar();
@@ -29,6 +35,39 @@ public class LoginActivity extends BaseActivity {
         BtLogin = $(R.id.bt_login);
         EdUserName = $(R.id.ed_user_name);
         EdUserPassword = $(R.id.ed_user_password);
+
+        TextView TvSetting = $(R.id.tv_setting);
+        TvSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                LayoutInflater inflater = LoginActivity.this.getLayoutInflater();
+                final View dialogView = inflater.inflate(R.layout.setting_dialog, null, false);
+                EditText hostAddress = dialogView.findViewById(R.id.host_address_et);
+                String host = ConfigHelper.read(ConfigHelper.PreferencesKey.HOST_ADDRESS);
+                hostAddress.setText(host);
+                dialogView.findViewById(R.id.positive_bt).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast("已设置.");
+                        EditText host_address = dialogView.findViewById(R.id.host_address_et);
+                        ConfigHelper.save(ConfigHelper.PreferencesKey.HOST_ADDRESS, host_address.getText().toString());
+                        mDialog.dismiss();
+                    }
+                });
+                dialogView.findViewById(R.id.negative_bt).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast("已取消.");
+                        mDialog.dismiss();
+                    }
+                });
+
+                builder.setView(dialogView);
+                mDialog = builder.create();
+                mDialog.show();
+            }
+        });
 
     }
 

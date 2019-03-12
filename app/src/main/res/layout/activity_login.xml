@@ -51,6 +51,23 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ed_user_password"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tv_setting"
+            android:layout_width="32sp"
+            android:layout_height="32sp"
+            android:layout_marginTop="128dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="\?"
+            android:textSize="28sp"
+            android:gravity="center"
+            android:textColor="#a3a1a1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 
 
