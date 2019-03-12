@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     protected final String TAG = this.getClass().getSimpleName();
@@ -46,4 +47,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public abstract int bindLayout();
 
     public abstract View bindView();
+
+    public void Toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 }
