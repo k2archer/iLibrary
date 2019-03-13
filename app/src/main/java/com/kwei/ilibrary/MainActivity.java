@@ -16,6 +16,7 @@ public class MainActivity extends BaseActivity {
         $(R.id.menu_home_bt).performClick();
 
         $(R.id.menu_borrow_bt).setOnClickListener(this);
+        $(R.id.menu_message_bt).setOnClickListener(this);
     }
 
     FragmentManager mManager = getSupportFragmentManager();
@@ -23,6 +24,7 @@ public class MainActivity extends BaseActivity {
 
     private void initFragment() {
         FragmentTransaction transaction = mManager.beginTransaction();
+        transaction.add(R.id.frame_content, new MessageFragment(), String.valueOf(R.id.menu_message_bt));
         transaction.add(R.id.frame_content, new OrderFragment(), String.valueOf(R.id.menu_borrow_bt));
         transaction.add(R.id.frame_content, new HomeFragment(), String.valueOf(R.id.menu_home_bt));
         mCurrentFragmentTag = String.valueOf(R.id.menu_home_bt);
@@ -37,6 +39,7 @@ public class MainActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.menu_home_bt:
             case R.id.menu_borrow_bt:
+            case R.id.menu_message_bt:
                 Fragment fragment = mManager.findFragmentByTag(String.valueOf(v.getId()));
                 if (fragment != null && !mCurrentFragmentTag.equals(fragment.getTag())) {
                     Fragment currentFragment = mManager.findFragmentByTag(mCurrentFragmentTag);
