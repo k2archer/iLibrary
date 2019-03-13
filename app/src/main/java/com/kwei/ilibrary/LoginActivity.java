@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kwei.ilibrary.base.BaseActivity;
 import com.kwei.ilibrary.base.BaseApplication;
@@ -40,35 +39,37 @@ public class LoginActivity extends BaseActivity {
         TvSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                LayoutInflater inflater = LoginActivity.this.getLayoutInflater();
-                final View dialogView = inflater.inflate(R.layout.setting_dialog, null, false);
-                EditText hostAddress = dialogView.findViewById(R.id.host_address_et);
-                String host = ConfigHelper.read(ConfigHelper.PreferencesKey.HOST_ADDRESS);
-                hostAddress.setText(host);
-                dialogView.findViewById(R.id.positive_bt).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast("已设置.");
-                        EditText host_address = dialogView.findViewById(R.id.host_address_et);
-                        ConfigHelper.save(ConfigHelper.PreferencesKey.HOST_ADDRESS, host_address.getText().toString());
-                        mDialog.dismiss();
-                    }
-                });
-                dialogView.findViewById(R.id.negative_bt).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast("已取消.");
-                        mDialog.dismiss();
-                    }
-                });
-
-                builder.setView(dialogView);
-                mDialog = builder.create();
-                mDialog.show();
+                showLoginSettingDialog();
             }
         });
 
+    }
+
+    private void showLoginSettingDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        LayoutInflater inflater = LoginActivity.this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.setting_dialog, null, false);
+        EditText hostAddress = dialogView.findViewById(R.id.host_address_et);
+        String host = ConfigHelper.read(ConfigHelper.PreferencesKey.HOST_ADDRESS);
+        hostAddress.setText(host);
+        dialogView.findViewById(R.id.positive_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText host_address = dialogView.findViewById(R.id.host_address_et);
+                ConfigHelper.save(ConfigHelper.PreferencesKey.HOST_ADDRESS, host_address.getText().toString());
+                mDialog.dismiss();
+            }
+        });
+        dialogView.findViewById(R.id.negative_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+        builder.setView(dialogView);
+        mDialog = builder.create();
+        mDialog.show();
     }
 
     @Override
@@ -109,6 +110,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onFailure(Exception e) {
                 LogUtil.d(e.toString());
+                Toast(e.toString());
             }
         });
 
