@@ -49,7 +49,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable throwable) {
 
-        if (!handleException(throwable) && mDefaultCrashHandler != null) {
+        if (mDefaultCrashHandler != null || !handleException(throwable)) {
             // 如果没有自定义处理器则让系统默认的异常处理器来处理
             mDefaultCrashHandler.uncaughtException(thread, throwable);
         } else {
