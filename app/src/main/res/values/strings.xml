@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">iLibrary</string>
     <string name="dialog_default_message">很抱歉,程序出现异常退出了!</string>
+
+    <string name="menu_home_bt_title">首页</string>
+    <string name="menu_borrow_bt_title">借书</string>
+    <string name="menu_message_bt_title">消息</string>
+    <string name="menu_me_bt_title">我的</string>
+
 </resources>
