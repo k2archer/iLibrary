@@ -7,7 +7,19 @@
     android:background="#1f48a3"
     tools:context=".LoginActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="iLibrary"
+        android:textSize="44sp"
+        android:textColor="#ffff"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="256dp"
         android:layout_height="178dp"
         android:background="@drawable/login_dialog_style"
@@ -60,10 +72,10 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:text="\?"
-            android:textSize="28sp"
             android:gravity="center"
+            android:text="\?"
             android:textColor="#a3a1a1"
+            android:textSize="28sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
