@@ -39,11 +39,11 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
 
     public void init(Context context, boolean useDefaultHandler) {
-        Thread.setDefaultUncaughtExceptionHandler(this);
-        mContext = context.getApplicationContext();
         if (useDefaultHandler) {
             mDefaultCrashHandler = Thread.getDefaultUncaughtExceptionHandler();
         }
+        Thread.setDefaultUncaughtExceptionHandler(this);
+        mContext = context.getApplicationContext();
     }
 
     @Override
@@ -68,6 +68,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             // dumpExceptionToServer(throwable);
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
         return true;
