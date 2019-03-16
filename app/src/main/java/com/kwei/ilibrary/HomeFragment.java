@@ -5,6 +5,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.kwei.ilibrary.base.BaseFragment;
+import com.kwei.ilibrary.comm.EventBus.EventBus;
+import com.kwei.ilibrary.comm.EventBus.Subscriber;
+import com.kwei.ilibrary.comm.EventTag;
 import com.kwei.ilibrary.comm.RecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -37,5 +40,19 @@ public class HomeFragment extends BaseFragment {
         mRecommendedListData = new ArrayList<>();
         mAdapter = new RecyclerViewAdapter(mRecommendedListData);
         mRecommendedList.setAdapter(mAdapter);
+        getRecommendedList();
+    }
+
+    private void getRecommendedList() {
+        EventBus.getInstance().register(new Subscriber<List<String>>() {
+
+            @Override
+            public void onEvent(List<String> event) {
+                mRecommendedListData.addAll(event);
+                mAdapter.notifyDataSetChanged();
+            }
+        }, new EventTag(EventTag.RECOMMENDED_LIST));
+
+        DataManager.getInstance().getRecommendedList();
     }
 }
