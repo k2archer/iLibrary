@@ -15,9 +15,10 @@ import java.util.List;
 
 public class HomeFragment extends BaseFragment {
 
-    private RecyclerView mRecommendedList;
-    private List<String> mRecommendedListData;
-    private RecyclerViewAdapter mAdapter;
+    private List<String> mOrderedListData = new ArrayList<>();
+    private RecyclerViewAdapter mOrderedAdapter;
+    private List<String> mRecommendedListData = new ArrayList<>();
+    private RecyclerViewAdapter mRecommendedAdapter;
 
     MainActivity mActivity;
 
@@ -34,25 +35,55 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void onCreateView() {
-        mRecommendedList = mRootView.findViewById(R.id.home_recommend_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mRootView.getContext());
-        mRecommendedList.setLayoutManager(layoutManager);
-        mRecommendedListData = new ArrayList<>();
-        mAdapter = new RecyclerViewAdapter(mRecommendedListData);
-        mRecommendedList.setAdapter(mAdapter);
+        initView();
+        getOrderedList();
         getRecommendedList();
     }
 
+    private void initView() {
+        RecyclerView mRecommendedList = mRootView.findViewById(R.id.home_recommend_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mRootView.getContext());
+        mRecommendedList.setLayoutManager(layoutManager);
+        mRecommendedAdapter = new RecyclerViewAdapter(mRecommendedListData);
+        mRecommendedList.setAdapter(mRecommendedAdapter);
+
+        RecyclerView mOrderedList = mRootView.findViewById(R.id.home_ordered_list);
+        mOrderedList.setLayoutManager(new LinearLayoutManager(mRootView.getContext()));
+        mOrderedAdapter = new RecyclerViewAdapter(mOrderedListData);
+        mOrderedList.setAdapter(mOrderedAdapter);
+    }
+
+    private Subscriber<List<String>> mOrderedSubscriber = new Subscriber<List<String>>() {
+        @Override
+        public void onEvent(List<String> event) {
+            mOrderedListData.addAll(event);
+            mOrderedAdapter.notifyDataSetChanged();
+        }
+    };
+
+    private void getOrderedList() {
+        EventBus.getInstance().register(mOrderedSubscriber, new EventTag(EventTag.ORDERED_LIST));
+        DataManager.getInstance().getOrderedList();
+    }
+
+    private Subscriber<List<String>> mRecommendedSubscriber = new Subscriber<List<String>>() {
+
+        @Override
+        public void onEvent(List<String> event) {
+            mRecommendedListData.addAll(event);
+            mRecommendedAdapter.notifyDataSetChanged();
+        }
+    };
+
     private void getRecommendedList() {
-        EventBus.getInstance().register(new Subscriber<List<String>>() {
-
-            @Override
-            public void onEvent(List<String> event) {
-                mRecommendedListData.addAll(event);
-                mAdapter.notifyDataSetChanged();
-            }
-        }, new EventTag(EventTag.RECOMMENDED_LIST));
-
+        EventBus.getInstance().register(mRecommendedSubscriber, new EventTag(EventTag.RECOMMENDED_LIST));
         DataManager.getInstance().getRecommendedList();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getInstance().unregister(mRecommendedSubscriber);
+        EventBus.getInstance().unregister(mOrderedSubscriber);
     }
 }

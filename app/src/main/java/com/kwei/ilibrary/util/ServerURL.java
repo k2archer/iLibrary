@@ -10,6 +10,10 @@ public class ServerURL {
         return getHostURL() + "user/login.cgi?user=" + name + "&pass=" + password;
     }
 
+    public static String getOrderURL(String name) {
+        return getHostURL() + "user/order.cgi?user=" + name;
+    }
+
     public static String getRecommendedListURL(String name) {
         return getHostURL() + "user/recommended.cgi?user=" + name;
     }

@@ -59,14 +59,44 @@ public class DataManager {
 
     }
 
-    public void getRecommendedList() {
+    public void getOrderedList() {
         if (mUserName.length() == 0) return;
 
-        String get_order_url = ServerURL.getRecommendedListURL(mUserName);
+        String get_order_url = ServerURL.getOrderURL(mUserName);
         HttpUtil.sendGETRequest(get_order_url, new HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
-                LogUtil.d(response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray array = jsonObject.getJSONArray("message");
+
+                    List<String> orderedList = new ArrayList<>();
+
+                    for (int i = 0; i < array.length(); i++) {
+                        LogUtil.d(array.getString(i));
+                        orderedList.add(array.getString(i));
+                    }
+
+                    EventBus.getInstance().post(orderedList, new EventTag(EventTag.ORDERED_LIST));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+
+            }
+        });
+    }
+
+    public void getRecommendedList() {
+        if (mUserName.length() == 0) return;
+
+        String get_recommended_url = ServerURL.getRecommendedListURL(mUserName);
+        HttpUtil.sendGETRequest(get_recommended_url, new HttpCallbackListener() {
+            @Override
+            public void onFinish(String response) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray array = jsonObject.getJSONArray("message");
