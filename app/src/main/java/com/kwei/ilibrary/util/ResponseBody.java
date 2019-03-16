@@ -19,6 +19,7 @@ public class ResponseBody {
             response.result = jsonObject.getString("result");
         } catch (JSONException e) {
             e.printStackTrace();
+            response = null;
         }
 
         return response;

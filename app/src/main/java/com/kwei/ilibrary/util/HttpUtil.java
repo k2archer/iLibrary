@@ -20,8 +20,8 @@ public class HttpUtil {
                     // set Request
                     connection.setRequestMethod("GET");
                     // set timeout
-                    connection.setConnectTimeout(5 * 1000);
-                    connection.setReadTimeout(5 * 1000);
+                    connection.setConnectTimeout(3 * 1000);
+                    connection.setReadTimeout(3 * 1000);
                     // get Input
                     InputStream in = connection.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in));

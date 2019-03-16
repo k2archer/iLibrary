@@ -95,18 +95,18 @@ public class LoginActivity extends BaseActivity {
 
         DataManager.getInstance().login(user_name, password, new DataCallback() {
             @Override
-            public void onSucceed() {
+            public void onSucceed(String result) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("user_name", user_name);
                 startActivity(intent);
             }
 
             @Override
-            public void onFailed() {
+            public void onFailed(final String result) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast("用户名或者密码不正确");
+                        Toast(result);
                     }
                 });
             }

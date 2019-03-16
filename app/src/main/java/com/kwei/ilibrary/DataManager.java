@@ -31,7 +31,7 @@ public class DataManager {
 
     public void login(final String name, String password, final DataCallback callback) {
         if (name.length() == 0 || password.length() == 0) {
-            callback.onFailed();
+            callback.onFailed("用户名和密码不能为空");
             return;
         }
         String loginURL = ServerURL.getLoginURL(name, password);
@@ -39,20 +39,23 @@ public class DataManager {
 
             @Override
             public void onFinish(String response) {
-                LogUtil.d("onFinish: " + response);
                 ResponseBody body = ResponseBody.parse(response);
+                if (body == null) {
+                    callback.onFailed("登录失败");
+                    LogUtil.d("onFinish: " + response);
+                    return;
+                }
                 if (body.code == ResponseBody.SUCCEED) {
-                    LogUtil.d("onFinish: " + "succeed");
-                    callback.onSucceed();
+                    callback.onSucceed(body.result);
                     mUserName = name;
                 } else {
-                    callback.onFailed();
-                    LogUtil.d("onFinish: " + "failed");
+                    callback.onFailed("用户名或密码错误");
                 }
             }
 
             @Override
             public void onFailure(Exception e) {
+                callback.onFailed("连接失败");
                 LogUtil.d("onFailure: " + e.toString());
             }
         });
