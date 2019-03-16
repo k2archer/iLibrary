@@ -56,6 +56,7 @@ public class HomeFragment extends BaseFragment {
     private Subscriber<List<String>> mOrderedSubscriber = new Subscriber<List<String>>() {
         @Override
         public void onEvent(List<String> event) {
+            mOrderedListData.clear();
             mOrderedListData.addAll(event);
             mOrderedAdapter.notifyDataSetChanged();
         }
@@ -70,6 +71,7 @@ public class HomeFragment extends BaseFragment {
 
         @Override
         public void onEvent(List<String> event) {
+            mRecommendedListData.clear();
             mRecommendedListData.addAll(event);
             mRecommendedAdapter.notifyDataSetChanged();
         }
