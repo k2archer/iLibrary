@@ -1,6 +1,5 @@
 package com.kwei.ilibrary;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -11,13 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.kwei.ilibrary.base.BaseActivity;
-import com.kwei.ilibrary.base.BaseApplication;
 import com.kwei.ilibrary.config.ConfigHelper;
-import com.kwei.ilibrary.util.HttpCallbackListener;
-import com.kwei.ilibrary.util.HttpUtil;
-import com.kwei.ilibrary.util.LogUtil;
-import com.kwei.ilibrary.util.ResponseBody;
-import com.kwei.ilibrary.util.ServerURL;
 
 public class LoginActivity extends BaseActivity {
     private Button BtLogin;
@@ -94,26 +87,30 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private void login(String name, String password) {
-        String loginURL = ServerURL.getLoginURL(name, password);
-        HttpUtil.sendGETRequest(loginURL, new HttpCallbackListener() {
+    private void login(final String user_name, String password) {
+        if (user_name.length() == 0 || password.length() == 0) {
+            Toast("用户名和密码不能为空");
+            return;
+        }
+
+        DataManager.getInstance().login(user_name, password, new DataCallback() {
             @Override
-            public void onFinish(String response) {
-                ResponseBody body = ResponseBody.parse(response);
-                if (body.code == ResponseBody.SUCCEED) {
-                    Context context = BaseApplication.getInstance().getApplicationContext();
-                    Intent intent = new Intent(context, MainActivity.class);
-                    startActivity(intent);
-                }
+            public void onSucceed() {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("user_name", user_name);
+                startActivity(intent);
             }
 
             @Override
-            public void onFailure(Exception e) {
-                LogUtil.d(e.toString());
-                Toast(e.toString());
+            public void onFailed() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast("用户名或者密码不正确");
+                    }
+                });
             }
         });
-
     }
 
     @Override
