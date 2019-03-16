@@ -120,4 +120,8 @@ public class DataManager {
             }
         });
     }
+
+    public String getUserName() {
+        return mUserName;
+    }
 }
