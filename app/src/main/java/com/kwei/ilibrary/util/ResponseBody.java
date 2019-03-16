@@ -9,6 +9,7 @@ public class ResponseBody {
     public String result;
     public static final int SUCCEED = 200;
     public static final int FAILED = 500;
+    public static final int ERROR = 300;
 
     public static ResponseBody parse(String json) {
         ResponseBody response = new ResponseBody();

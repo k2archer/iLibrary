@@ -40,7 +40,7 @@ public class DataManager {
             @Override
             public void onFinish(String response) {
                 ResponseBody body = ResponseBody.parse(response);
-                if (body == null) {
+                if (body == null || body.code == ResponseBody.ERROR) {
                     callback.onFailed("登录失败");
                     LogUtil.d("onFinish: " + response);
                     return;
