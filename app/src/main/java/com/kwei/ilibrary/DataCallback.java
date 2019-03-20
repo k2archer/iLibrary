@@ -1,7 +1,7 @@
 package com.kwei.ilibrary;
 
 public interface DataCallback {
-    void onSucceed(String result) ;
+    void onSucceed(Object result) ;
 
-    void onFailed(String result);
+    void onFailed(Object result);
 }

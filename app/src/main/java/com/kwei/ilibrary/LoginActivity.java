@@ -95,18 +95,18 @@ public class LoginActivity extends BaseActivity {
 
         DataManager.getInstance().login(user_name, password, new DataCallback() {
             @Override
-            public void onSucceed(String result) {
+            public void onSucceed(Object result) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("user_name", user_name);
                 startActivity(intent);
             }
 
             @Override
-            public void onFailed(final String result) {
+            public void onFailed(final Object result) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast(result);
+                        Toast(result.toString());
                     }
                 });
             }
