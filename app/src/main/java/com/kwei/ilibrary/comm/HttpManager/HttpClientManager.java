@@ -28,46 +28,6 @@ public class HttpClientManager {
         return Instance.instance;
     }
 
-    public static void testDemo() {
-        JSONObject user = new JSONObject();
-        try {
-            user.put("user_name", "pk");
-            user.put("user_password", "asdfasdf");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        String body = user.toString();
-        HttpClientManager.post("http://192.168.0.153:8080/post.php", body,
-                new HttpCallBack() {
-                    @Override
-                    public void onSucceed(HttpResponse object) {
-                        LogUtil.d(object.body);
-                    }
-
-                    @Override
-                    public void onFailure(HttpResponse object, Exception e) {
-                        LogUtil.d(" " + object.code);
-                        LogUtil.d(e.toString());
-                    }
-                });
-
-        String url = "http://192.168.0.153:8081/service/v.1.0/user/login.cgi?user=admin&pass=admin";
-        HttpClientManager.get(url, new HttpCallBack() {
-                    @Override
-                    public void onSucceed(HttpResponse object) {
-                        LogUtil.d(object.body);
-                    }
-
-                    @Override
-                    public void onFailure(HttpResponse object, Exception e) {
-                        LogUtil.d(" " + object.code);
-                        LogUtil.d(e.toString());
-                    }
-                });
-
-    }
-
     public static void get(String url, HttpCallBack callBack) {
         HttpClientManager.getInstance()._get(url, callBack);
     }
