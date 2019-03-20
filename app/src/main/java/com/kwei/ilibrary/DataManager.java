@@ -2,8 +2,9 @@ package com.kwei.ilibrary;
 
 import com.kwei.ilibrary.comm.EventBus.EventBus;
 import com.kwei.ilibrary.comm.EventTag;
-import com.kwei.ilibrary.util.HttpCallbackListener;
-import com.kwei.ilibrary.util.HttpUtil;
+import com.kwei.ilibrary.comm.HttpManager.HttpCallBack;
+import com.kwei.ilibrary.comm.HttpManager.HttpClientManager;
+import com.kwei.ilibrary.comm.HttpManager.HttpResponse;
 import com.kwei.ilibrary.util.LogUtil;
 import com.kwei.ilibrary.util.ResponseBody;
 import com.kwei.ilibrary.util.ServerURL;
@@ -35,11 +36,10 @@ public class DataManager {
             return;
         }
         String loginURL = ServerURL.getLoginURL(name, password);
-        HttpUtil.sendGETRequest(loginURL, new HttpCallbackListener() {
-
+        HttpClientManager.get(loginURL, new HttpCallBack() {
             @Override
-            public void onFinish(String response) {
-                ResponseBody body = ResponseBody.parse(response);
+            public void onSucceed(HttpResponse response) {
+                ResponseBody body = ResponseBody.parse(response.body);
                 if (body == null || body.code == ResponseBody.ERROR) {
                     callback.onFailed("登录失败");
                     LogUtil.d("onFinish: " + response);
@@ -51,10 +51,11 @@ public class DataManager {
                 } else {
                     callback.onFailed("用户名或密码错误");
                 }
+
             }
 
             @Override
-            public void onFailure(Exception e) {
+            public void onFailure(HttpResponse object, Exception e) {
                 callback.onFailed("连接失败");
                 LogUtil.d("onFailure: " + e.toString());
             }
@@ -66,11 +67,11 @@ public class DataManager {
         if (mUserName.length() == 0) return;
 
         String get_order_url = ServerURL.getOrderURL(mUserName);
-        HttpUtil.sendGETRequest(get_order_url, new HttpCallbackListener() {
+        HttpClientManager.get(get_order_url, new HttpCallBack() {
             @Override
-            public void onFinish(String response) {
+            public void onSucceed(HttpResponse response) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonObject = new JSONObject(response.body);
                     JSONArray array = jsonObject.getJSONArray("message");
 
                     List<String> orderedList = new ArrayList<>();
@@ -87,7 +88,7 @@ public class DataManager {
             }
 
             @Override
-            public void onFailure(Exception e) {
+            public void onFailure(HttpResponse object, Exception e) {
 
             }
         });
@@ -97,11 +98,11 @@ public class DataManager {
         if (mUserName.length() == 0) return;
 
         String get_recommended_url = ServerURL.getRecommendedListURL(mUserName);
-        HttpUtil.sendGETRequest(get_recommended_url, new HttpCallbackListener() {
+        HttpClientManager.get(get_recommended_url, new HttpCallBack() {
             @Override
-            public void onFinish(String response) {
+            public void onSucceed(HttpResponse response) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonObject = new JSONObject(response.body);
                     JSONArray array = jsonObject.getJSONArray("message");
 
                     List<String> recommendedList = new ArrayList<>();
@@ -118,7 +119,7 @@ public class DataManager {
             }
 
             @Override
-            public void onFailure(Exception e) {
+            public void onFailure(HttpResponse object, Exception e) {
 
             }
         });
