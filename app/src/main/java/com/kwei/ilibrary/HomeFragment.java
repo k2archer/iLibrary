@@ -1,6 +1,7 @@
 package com.kwei.ilibrary;
 
 import android.content.Context;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -47,12 +48,18 @@ public class HomeFragment extends BaseFragment {
         RecyclerView mRecommendedList = mRootView.findViewById(R.id.home_recommend_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mRootView.getContext());
         mRecommendedList.setLayoutManager(layoutManager);
+        //添加Android自带的分割线
+        mRecommendedList.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+
         mRecommendedAdapter = new MultiTypeItemAdapter<>(getActivity(), mRecommendedListData);
         mRecommendedAdapter.addItemDelegate(new BookItemDelegate<BookItemData>());
         mRecommendedList.setAdapter(mRecommendedAdapter);
 
         RecyclerView mOrderedList = mRootView.findViewById(R.id.home_ordered_list);
         mOrderedList.setLayoutManager(new LinearLayoutManager(mRootView.getContext()));
+        //添加Android自带的分割线
+        mRecommendedList.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+
         mOrderedAdapter = new RecyclerViewAdapter(mOrderedListData);
         mOrderedList.setAdapter(mOrderedAdapter);
     }
