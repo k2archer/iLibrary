@@ -8,14 +8,14 @@ import com.kwei.ilibrary.comm.EventBus.EventBus;
 import com.kwei.ilibrary.comm.EventBus.Subscriber;
 import com.kwei.ilibrary.comm.EventTag;
 import com.kwei.ilibrary.comm.RecyclerViewAdapter;
-import com.kwei.ilibrary.util.BookItem;
+import com.kwei.ilibrary.util.BookItemData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderFragment extends BaseFragment {
 
-    private List<BookItem> mOrderedListData = new ArrayList<>();
+    private List<BookItemData> mOrderedListData = new ArrayList<>();
     private RecyclerViewAdapter mOrderedAdapter;
 
     @Override
@@ -37,9 +37,9 @@ public class OrderFragment extends BaseFragment {
         mOrderedList.setAdapter(mOrderedAdapter);
     }
 
-    private Subscriber<List<BookItem>> mOrderedSubscriber = new Subscriber<List<BookItem>>() {
+    private Subscriber<List<BookItemData>> mOrderedSubscriber = new Subscriber<List<BookItemData>>() {
         @Override
-        public void onEvent(List<BookItem> event) {
+        public void onEvent(List<BookItemData> event) {
             mOrderedListData.clear();
             mOrderedListData.addAll(event);
             mOrderedAdapter.notifyDataSetChanged();

@@ -5,19 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kwei.ilibrary.R;
-import com.kwei.ilibrary.util.BookItem;
+import com.kwei.ilibrary.util.BookItemData;
 
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_EMPTY = -1;
-    private List<BookItem> mData;
+    private List<BookItemData> mData;
 
-    public RecyclerViewAdapter(List<BookItem> data) {
+    public RecyclerViewAdapter(List<BookItemData> data) {
         mData = data;
     }
 
@@ -34,7 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
-            BookItem book = mData.get(position);
+            BookItemData book = mData.get(position);
             ((ItemViewHolder) holder).textView.setText(book.name);
         }
     }
@@ -60,7 +59,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
         private TextView textView;
 
         public ItemViewHolder(ViewGroup parent) {
-            this(LayoutInflater.from(parent.getContext()).inflate(R.layout.book_lsit_item, parent, false));
+            this(LayoutInflater.from(parent.getContext()).inflate(R.layout.ordered_lsit_item, parent, false));
         }
 
         public ItemViewHolder(@NonNull View itemView) {

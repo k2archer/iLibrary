@@ -9,17 +9,19 @@ import com.kwei.ilibrary.comm.EventBus.EventBus;
 import com.kwei.ilibrary.comm.EventBus.Subscriber;
 import com.kwei.ilibrary.comm.EventTag;
 import com.kwei.ilibrary.comm.RecyclerViewAdapter;
-import com.kwei.ilibrary.util.BookItem;
+import com.kwei.ilibrary.comm.ViewAdapter.MultiTypeItemAdapter;
+import com.kwei.ilibrary.util.BookItemData;
+import com.kwei.ilibrary.util.BookItemDelegate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends BaseFragment {
 
-    private List<BookItem> mOrderedListData = new ArrayList<>();
+    private List<BookItemData> mOrderedListData = new ArrayList<>();
     private RecyclerViewAdapter mOrderedAdapter;
-    private List<BookItem> mRecommendedListData = new ArrayList<>();
-    private RecyclerViewAdapter mRecommendedAdapter;
+    private List<BookItemData> mRecommendedListData = new ArrayList<>();
+    private MultiTypeItemAdapter mRecommendedAdapter;
 
     MainActivity mActivity;
 
@@ -45,7 +47,8 @@ public class HomeFragment extends BaseFragment {
         RecyclerView mRecommendedList = mRootView.findViewById(R.id.home_recommend_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mRootView.getContext());
         mRecommendedList.setLayoutManager(layoutManager);
-        mRecommendedAdapter = new RecyclerViewAdapter(mRecommendedListData);
+        mRecommendedAdapter = new MultiTypeItemAdapter<>(getActivity(), mRecommendedListData);
+        mRecommendedAdapter.addItemDelegate(new BookItemDelegate<BookItemData>());
         mRecommendedList.setAdapter(mRecommendedAdapter);
 
         RecyclerView mOrderedList = mRootView.findViewById(R.id.home_ordered_list);
@@ -54,9 +57,9 @@ public class HomeFragment extends BaseFragment {
         mOrderedList.setAdapter(mOrderedAdapter);
     }
 
-    private Subscriber<List<BookItem>> mOrderedSubscriber = new Subscriber<List<BookItem>>() {
+    private Subscriber<List<BookItemData>> mOrderedSubscriber = new Subscriber<List<BookItemData>>() {
         @Override
-        public void onEvent(List<BookItem> event) {
+        public void onEvent(List<BookItemData> event) {
             mOrderedListData.clear();
             mOrderedListData.addAll(event);
             mOrderedAdapter.notifyDataSetChanged();
@@ -68,10 +71,10 @@ public class HomeFragment extends BaseFragment {
         DataManager.getInstance().getOrderedList();
     }
 
-    private Subscriber<List<BookItem>> mRecommendedSubscriber = new Subscriber<List<BookItem>>() {
+    private Subscriber<List<BookItemData>> mRecommendedSubscriber = new Subscriber<List<BookItemData>>() {
 
         @Override
-        public void onEvent(List<BookItem> event) {
+        public void onEvent(List<BookItemData> event) {
             mRecommendedListData.clear();
             mRecommendedListData.addAll(event);
             mRecommendedAdapter.notifyDataSetChanged();
