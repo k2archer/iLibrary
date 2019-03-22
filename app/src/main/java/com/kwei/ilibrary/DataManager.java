@@ -75,11 +75,12 @@ public class DataManager {
                     JSONObject jsonObject = new JSONObject(new String(response.body));
                     JSONArray array = jsonObject.getJSONArray("message");
 
-                    List<String> orderedList = new ArrayList<>();
+                    List<BookItem> orderedList = new ArrayList<>();
 
                     for (int i = 0; i < array.length(); i++) {
                         LogUtil.d(array.getString(i));
-                        orderedList.add(array.getString(i));
+                        BookItem bookItem = BookItem.create(array.getJSONObject(i));
+                        orderedList.add(bookItem);
                     }
 
                     EventBus.getInstance().post(orderedList, new EventTag(EventTag.ORDERED_LIST));
@@ -111,10 +112,8 @@ public class DataManager {
 
                     for (int i = 0; i < array.length(); i++) {
                         LogUtil.d(array.getString(i));
-                        JSONObject book = new JSONObject(array.getString(i));
-                        String name = book.getString("book_name");
-                        String cover = book.getString("book_cover");
-                        recommendedList.add(new BookItem(name, cover));
+                        BookItem bookItem = BookItem.create(array.getJSONObject(i));
+                        recommendedList.add(bookItem);
                     }
 
                     EventBus.getInstance().post(recommendedList, new EventTag(EventTag.RECOMMENDED_LIST));
