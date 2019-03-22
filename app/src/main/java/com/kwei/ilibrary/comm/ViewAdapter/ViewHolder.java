@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kwei.ilibrary.comm.ImageLoader.ImageLoader;
+
 public class ViewHolder extends RecyclerView.ViewHolder {
     private SparseArray<View> mViews;
     private Context mContext;
@@ -55,6 +57,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder setImageView(int viewId, String url) {
         ImageView iv = getView(viewId);
+        ImageLoader imageLoader = new ImageLoader(getConvertView().getContext());
+        imageLoader.bindImage(url, iv);
 
         return this;
     }
