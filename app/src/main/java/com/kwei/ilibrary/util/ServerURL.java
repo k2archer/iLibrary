@@ -11,7 +11,8 @@ public class ServerURL {
     }
 
     public static String getImageURL(String cover) {
-        return protocol + "//" + getHostURL() + "/files/image/" + cover + ".jpg";
+        String host = ConfigHelper.read(ConfigHelper.PreferencesKey.HOST_ADDRESS);
+        return protocol + "//" + host + "/files/image/" + cover + ".jpg";
     }
 
     public static String getOrderURL(String name) {
