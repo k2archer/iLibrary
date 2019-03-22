@@ -5,17 +5,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kwei.ilibrary.R;
+import com.kwei.ilibrary.util.BookItem;
 
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter {
     private static final int TYPE_EMPTY = -1;
-    private List<String> mData;
+    private List<BookItem> mData;
 
-    public RecyclerViewAdapter(List<String> data) {
+    public RecyclerViewAdapter(List<BookItem> data) {
         mData = data;
     }
 
@@ -32,8 +34,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
-            String book_name = mData.get(position);
-            ((ItemViewHolder) holder).textView.setText(book_name);
+            BookItem book = mData.get(position);
+            ((ItemViewHolder) holder).textView.setText(book.name);
         }
     }
 

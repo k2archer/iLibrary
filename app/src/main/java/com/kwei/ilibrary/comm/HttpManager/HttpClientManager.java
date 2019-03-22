@@ -1,16 +1,9 @@
 package com.kwei.ilibrary.comm.HttpManager;
 
-
-import com.kwei.ilibrary.util.LogUtil;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -26,6 +19,10 @@ public class HttpClientManager {
 
     public static HttpClientManager getInstance() {
         return Instance.instance;
+    }
+
+    public static HttpResponse get(String url) throws IOException {
+        return HttpClientManager.getInstance().sendRequest(url, "GET", null);
     }
 
     public static void get(String url, HttpCallBack callBack) {
@@ -85,13 +82,13 @@ public class HttpClientManager {
         response.code = connection.getResponseCode();
         // get Input
         InputStream in = connection.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        StringBuilder builder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            builder.append(line);
+        ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+        byte[] buff = new byte[256];
+        int rc = 0;
+        while ((rc = in.read(buff, 0, 256)) > 0) {
+            swapStream.write(buff, 0, rc);
         }
-        response.body = builder.toString();
+        response.body = swapStream.toByteArray();
 
         closeStream(in);
         closeConnection(connection);

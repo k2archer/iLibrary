@@ -5,6 +5,7 @@ import com.kwei.ilibrary.comm.EventTag;
 import com.kwei.ilibrary.comm.HttpManager.HttpCallBack;
 import com.kwei.ilibrary.comm.HttpManager.HttpClientManager;
 import com.kwei.ilibrary.comm.HttpManager.HttpResponse;
+import com.kwei.ilibrary.util.BookItem;
 import com.kwei.ilibrary.util.LogUtil;
 import com.kwei.ilibrary.util.ResponseBody;
 import com.kwei.ilibrary.util.ServerURL;
@@ -39,7 +40,7 @@ public class DataManager {
         HttpClientManager.get(loginURL, new HttpCallBack() {
             @Override
             public void onSucceed(HttpResponse response) {
-                ResponseBody body = ResponseBody.parse(response.body);
+                ResponseBody body = ResponseBody.parse(new String(response.body));
                 if (body == null || body.code == ResponseBody.ERROR) {
                     callback.onFailed("登录失败");
                     LogUtil.d("onFinish: " + response);
@@ -71,7 +72,7 @@ public class DataManager {
             @Override
             public void onSucceed(HttpResponse response) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response.body);
+                    JSONObject jsonObject = new JSONObject(new String(response.body));
                     JSONArray array = jsonObject.getJSONArray("message");
 
                     List<String> orderedList = new ArrayList<>();
@@ -102,14 +103,18 @@ public class DataManager {
             @Override
             public void onSucceed(HttpResponse response) {
                 try {
-                    JSONObject jsonObject = new JSONObject(response.body);
+                    JSONObject jsonObject = new JSONObject(new String(response.body));
                     JSONArray array = jsonObject.getJSONArray("message");
 
-                    List<String> recommendedList = new ArrayList<>();
+
+                    List<BookItem> recommendedList = new ArrayList<>();
 
                     for (int i = 0; i < array.length(); i++) {
                         LogUtil.d(array.getString(i));
-                        recommendedList.add(array.getString(i));
+                        JSONObject book = new JSONObject(array.getString(i));
+                        String name = book.getString("book_name");
+                        String cover = book.getString("book_cover");
+                        recommendedList.add(new BookItem(name, cover));
                     }
 
                     EventBus.getInstance().post(recommendedList, new EventTag(EventTag.RECOMMENDED_LIST));

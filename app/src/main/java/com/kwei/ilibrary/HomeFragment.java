@@ -9,15 +9,16 @@ import com.kwei.ilibrary.comm.EventBus.EventBus;
 import com.kwei.ilibrary.comm.EventBus.Subscriber;
 import com.kwei.ilibrary.comm.EventTag;
 import com.kwei.ilibrary.comm.RecyclerViewAdapter;
+import com.kwei.ilibrary.util.BookItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends BaseFragment {
 
-    private List<String> mOrderedListData = new ArrayList<>();
+    private List<BookItem> mOrderedListData = new ArrayList<>();
     private RecyclerViewAdapter mOrderedAdapter;
-    private List<String> mRecommendedListData = new ArrayList<>();
+    private List<BookItem> mRecommendedListData = new ArrayList<>();
     private RecyclerViewAdapter mRecommendedAdapter;
 
     MainActivity mActivity;
@@ -53,9 +54,9 @@ public class HomeFragment extends BaseFragment {
         mOrderedList.setAdapter(mOrderedAdapter);
     }
 
-    private Subscriber<List<String>> mOrderedSubscriber = new Subscriber<List<String>>() {
+    private Subscriber<List<BookItem>> mOrderedSubscriber = new Subscriber<List<BookItem>>() {
         @Override
-        public void onEvent(List<String> event) {
+        public void onEvent(List<BookItem> event) {
             mOrderedListData.clear();
             mOrderedListData.addAll(event);
             mOrderedAdapter.notifyDataSetChanged();
@@ -67,10 +68,10 @@ public class HomeFragment extends BaseFragment {
         DataManager.getInstance().getOrderedList();
     }
 
-    private Subscriber<List<String>> mRecommendedSubscriber = new Subscriber<List<String>>() {
+    private Subscriber<List<BookItem>> mRecommendedSubscriber = new Subscriber<List<BookItem>>() {
 
         @Override
-        public void onEvent(List<String> event) {
+        public void onEvent(List<BookItem> event) {
             mRecommendedListData.clear();
             mRecommendedListData.addAll(event);
             mRecommendedAdapter.notifyDataSetChanged();
