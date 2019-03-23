@@ -5,8 +5,10 @@ import com.kwei.ilibrary.comm.EventTag;
 import com.kwei.ilibrary.comm.HttpManager.HttpCallBack;
 import com.kwei.ilibrary.comm.HttpManager.HttpClientManager;
 import com.kwei.ilibrary.comm.HttpManager.HttpResponse;
+import com.kwei.ilibrary.comm.ViewAdapter.BaseItem;
 import com.kwei.ilibrary.util.BookItemData;
 import com.kwei.ilibrary.util.LogUtil;
+import com.kwei.ilibrary.util.OrderedItemData;
 import com.kwei.ilibrary.util.ResponseBody;
 import com.kwei.ilibrary.util.ServerURL;
 
@@ -75,11 +77,11 @@ public class DataManager {
                     JSONObject jsonObject = new JSONObject(new String(response.body));
                     JSONArray array = jsonObject.getJSONArray("message");
 
-                    List<BookItemData> orderedList = new ArrayList<>();
+                    List<BaseItem> orderedList = new ArrayList<>();
 
                     for (int i = 0; i < array.length(); i++) {
                         LogUtil.d(array.getString(i));
-                        BookItemData bookItem = BookItemData.create(array.getJSONObject(i));
+                        BaseItem bookItem = OrderedItemData.create(array.getJSONObject(i));
                         orderedList.add(bookItem);
                     }
 

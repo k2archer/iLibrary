@@ -1,5 +1,7 @@
 package com.kwei.ilibrary.comm.HttpManager;
 
+import com.kwei.ilibrary.util.LogUtil;
+
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
@@ -59,7 +61,7 @@ public class HttpClientManager {
     }
 
     private HttpResponse sendRequest(String url, String method, String body) throws IOException {
-        int timeout = 3;
+        int timeout = 5;
 
         HttpResponse response = new HttpResponse();
 
