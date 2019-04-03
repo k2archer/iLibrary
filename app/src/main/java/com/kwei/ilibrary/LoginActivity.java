@@ -3,8 +3,10 @@ package com.kwei.ilibrary;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -70,13 +72,22 @@ public class LoginActivity extends BaseActivity {
         BtLogin.setOnClickListener(this);
         EdUserName.setOnClickListener(this);
         EdUserPassword.setOnClickListener(this);
+        EdUserPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    login();
+                }
+                return false;
+            }
+        });
     }
 
     @Override
     public void widgetClick(View v) {
         switch (v.getId()) {
             case R.id.bt_login:
-                login(EdUserName.getText().toString(), EdUserPassword.getText().toString());
+                login();
                 break;
             case R.id.ed_user_name:
 
@@ -85,6 +96,10 @@ public class LoginActivity extends BaseActivity {
 
                 break;
         }
+    }
+
+    private void login() {
+        login(EdUserName.getText().toString(), EdUserPassword.getText().toString());
     }
 
     private void login(final String user_name, String password) {
